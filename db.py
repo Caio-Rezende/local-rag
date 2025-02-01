@@ -56,7 +56,7 @@ class DBSingleton:
         if os.path.exists(self._metadata_file):
             with open(self._metadata_file, "r") as f:
                 self._embedded_files = set(json.load(f))
-            self._logger.print("\tLoaded metadata from {self._metadata_file}")
+            self._logger.print(f"\tLoaded metadata from {self._metadata_file}")
 
     def _save_local(self):
         """Save metadata of embedded files."""
