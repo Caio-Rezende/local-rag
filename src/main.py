@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from db import DBSingleton
 from llm import LLMSingleton
 from logger import Logger
+from commands import CommandHandler
 
 
 try:
@@ -21,15 +22,19 @@ try:
 
     line = "=" * 50
 
+    handler = CommandHandler()
+
     while True:
         print(f"\n{line}\n")
         # Prompt the user for input
-        query = input("Enter your query (or leave blank to exit): ")
+        query = input("Enter your query (or \h for options): ")
 
-        # Check if the 'Esc' key is pressed
-        if query == "":
-            print("Exiting...")
+        action = handler.handle_command(query)
+
+        if action == -1:
             break
+        elif action == 0:
+            continue
 
         # Call the query method with the user input
         result = llm.query(query)
