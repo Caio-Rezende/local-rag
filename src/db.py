@@ -19,16 +19,15 @@ class DBSingleton:
     """A singleton class to manage embeddings and vector database."""
 
     _instance = None
-    _logger: Logger = None
+    _logger: Logger = Logger()
     _embedded_files = set()  # To track embedded files
-    _metadata_file = "faiss_db/embedded_files.json"  # File to store metadata
-    _save_path = "faiss_db"
+    _metadata_file = "storage/embedded_files.json"  # File to store metadata
+    _save_path = "storage"
     _db = None  # Placeholder for the FAISS database
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(DBSingleton, cls).__new__(cls)
-            cls._instance._logger = Logger()
             cls._instance._initialize()
 
         return cls._instance
@@ -86,15 +85,13 @@ class DBSingleton:
         Returns:
             list: A list of text fragments (splits) from the PDF.
         """
-        logger = Logger()
-
         # Create a loader instance to read and process the PDF
         loader = PyPDFLoader(file_path)
-        logger.print(f"Loaded file: {file_path}")
+        self._logger.print(f"Loaded file: {file_path}")
 
         # Load the PDF and split it into pages for easier processing
         pages = loader.load_and_split()
-        logger.print(f"\tTotal Pages: {len(pages)}")
+        self._logger.print(f"\tTotal Pages: {len(pages)}")
 
         # Create a text splitter to divide text into chunks of 1000 characters with 200-character overlap
         text_splitter = RecursiveCharacterTextSplitter(
@@ -103,7 +100,7 @@ class DBSingleton:
 
         # Apply the text splitter to the PDF pages, resulting in a list of smaller text fragments
         splits = text_splitter.split_documents(pages)
-        logger.print(f"\tTotal Splits: {len(splits)}")
+        self._logger.print(f"\tTotal Splits: {len(splits)}")
 
         return splits
 

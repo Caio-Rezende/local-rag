@@ -101,4 +101,6 @@ class LLMSingleton:
 
         answer += AnswerFormatter.format_answer_with_references(answer, source_documents)
 
+        self._session_store.save()
+
         return answer
