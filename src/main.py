@@ -17,6 +17,7 @@ try:
     retriever = db.get_retriever()
 
     llm = LLMSingleton()
+    llm.add_retriever(retriever)
 
     line = "=" * 50
 
@@ -31,7 +32,7 @@ try:
             break
 
         # Call the query method with the user input
-        result = llm.query(retriever, query)
+        result = llm.query(query)
 
         # Print the result
         logger.print(result)

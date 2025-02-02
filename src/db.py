@@ -1,13 +1,16 @@
 import json
-import torch
 import os
+import torch
 
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings.sentence_transformer import (
     SentenceTransformerEmbeddings,
 )
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_core.documents import Document
+from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from typing import List
 
 from logger import Logger
 
@@ -73,7 +76,7 @@ class DBSingleton:
                 json.dump(list(self._embedded_files), f)
             self._logger.print(f"\tmetadata saved to {self._metadata_file}")
 
-    def _split_pdf(self, file_path, chunk_size=1000, chunk_overlap=200):
+    def _split_pdf(self, file_path, chunk_size=1000, chunk_overlap=200) -> List[Document]:
         """
         Processes a PDF file, splits it into pages, and then divides the text into smaller chunks.
 
@@ -129,7 +132,7 @@ class DBSingleton:
         self._save_local()
         self._logger.print("Embeddings created and stored in the FAISS database.")
 
-    def get_retriever(self):
+    def get_retriever(self) -> VectorStoreRetriever:
         """
         Get the FAISS database retriever.
 

@@ -18,8 +18,8 @@ class Logger:
         self._verbose = os.getenv("LOCAL_RAG_VERBOSE", "false").lower() == "true"
 
     def obfuscate_value(self, value):
-        if len(value) > 6:
-            return value[:3] + "*" + value[-3:]
+        if len(value) > 13:
+            return value[:5] + "***" + value[-5:]
         return value
 
     def _print_env(self):
